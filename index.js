@@ -314,7 +314,7 @@ window.onload = function init() {
     var dY = e.pageY - oldPosY;
     var magPhi = Math.abs(degrees(PHI)%360);
     
-    // Allow for rotation beyond +-360 degrees
+    // Allow for rotation past the theta and phi limit by resetting
     if (magPhi > 180.0 && magPhi < 270.0 || PHI < 0.0) {
       if (degrees(PHI)%360 < -180.0) {
         up = vec3(0.0, 1.0, 0.0);
@@ -338,16 +338,17 @@ window.onload = function init() {
     oldPosY = e.pageY;
     e.preventDefault();
   };
-  
+
+  // Handles zoom in and out
   var mouseWheel = function(e) {
-    if (cameraRadius - e.wheelDelta/75 < cameraRadiusMinimum) {
+    if (cameraRadius - e.wheelDelta/75 < cameraRadiusMinimum)
       cameraRadius = cameraRadiusMinimum;
-    } else if (cameraRadius - e.wheelDelta/75 > cameraRadiusMaximum) {
+    else if (cameraRadius - e.wheelDelta/75 > cameraRadiusMaximum)
       cameraRadius = cameraRadiusMaximum;
-    } else {
+    else
       cameraRadius -= e.wheelDelta/75;
-    }
   };
+  // Event listneers for primary actions
   canvas.addEventListener("mousewheel", mouseWheel, false);
   canvas.addEventListener("mousedown", mouseDown, false);
   canvas.addEventListener("mouseup", mouseUp, false);
@@ -410,13 +411,14 @@ window.onload = function init() {
       cubeState = fileContent.slice();
   };
 
+  // handles saving of the cube state
   document.getElementById( "SaveButton" ).onclick = function () {
     var link = document.getElementById("downloadlink");
     link.href = maketextFile(JSON.stringify(cubeState));
     link.innerHTML = "Press to Download Save State";
   };
   
-  // Set up WebGL
+  // Set up WebGL and all aspects like described in the textbooks example projects
   gl = WebGLUtils.setupWebGL(canvas);
   if (!gl) 
     alert("WebGL not available");
@@ -480,7 +482,7 @@ function reColor(x,y,z) {
   
 
 }
-
+// Loops through all cube states to determine if the cube is in a finished state
 function checkSolved() {
   var orientation;
   for (i = 0; i < 3; i++) {
@@ -531,15 +533,13 @@ function negateVec(vec) {
     temp[i] = -vec[i];
   return temp;
 }
-
+// setter and getter functions
 function getRotationAxes(x,y,z) {
   return cubeState[x+1][y+1][z+1][3];
 }
-
 function getRotationMatrix(x,y,z) {
   return cubeState[x+1][y+1][z+1][4];
 }
-
 function setRotationMatrix(x,y,z,m) {
   cubeState[x+1][y+1][z+1][4] = m;
 }
