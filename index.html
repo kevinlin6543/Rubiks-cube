@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Rubik's Cube</title>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+    attribute vec4 vColor;
+    varying vec4 fColor;
+    
+    uniform mat4 projectionMatrix;
+    uniform mat4 modelViewMatrix;
+
+    void main() {
+        fColor = vColor;
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    }
+  </script>
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+     
+    varying vec4 fColor;
+     
+    void main () {
+      gl_FragColor = fColor;
+    }
+  </script>
+  <script type="text/javascript" src="MV.js"></script>
+  <script type="text/javascript" src="webgl-utils.js"></script>
+  <script type="text/javascript" src="initShaders.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+
+</head>
+<body>
+  <canvas id="gl-canvas" width="512" height="512">
+    Your browser doesn't support the HTML5 canvas element
+  </canvas>
+  <br/>
+  <div style="width: 800px;position: absolute;top:50px; left: 550px">
+  <button id= "LButton" style="width:75px; height:75px;font-size: 25px;margin-bottom:5px;">L</button>
+  <button id= "RButton" style="width:75px; height:75px;font-size: 25px;">R</button>
+  <button id= "UButton" style="width:75px; height:75px;font-size: 25px;">U</button>
+  <button id= "DButton" style="width:75px; height:75px;font-size: 25px;">D</button>
+  <button id= "FButton" style="width:75px; height:75px;font-size: 25px;">F</button>
+  <button id= "BButton" style="width:75px; height:75px;font-size: 25px;">B</button>
+  <button id= "MButton" style="width:75px; height:75px;font-size: 25px;">M</button>
+  <button id= "EButton" style="width:75px; height:75px;font-size: 25px;">E</button>
+  <button id= "SButton" style="width:75px; height:75px;font-size: 25px;">S</button>
+
+  <br/>
+  <button id= "LiButton" style="width:75px; height:75px;font-size: 25px;">L'</button>
+  <button id= "RiButton" style="width:75px; height:75px;font-size: 25px;">R'</button>
+  <button id= "UiButton" style="width:75px; height:75px;font-size: 25px;">U'</button>
+  <button id= "DiButton" style="width:75px; height:75px;font-size: 25px;">D'</button>
+  <button id= "FiButton" style="width:75px; height:75px;font-size: 25px;">F'</button>
+  <button id= "BiButton" style="width:75px; height:75px;font-size: 25px;">B'</button>
+  <button id= "MiButton" style="width:75px; height:75px;font-size: 25px;">M'</button>
+  <button id= "EiButton" style="width:75px; height:75px;font-size: 25px;">E'</button>
+  <button id= "SiButton" style="width:75px; height:75px;font-size: 25px;">S'</button>
+  </div>
+  <div style="width: 800px;position: absolute ;top:220px; left: 780px">
+    <a href="https://ruwix.com/the-rubiks-cube/notation/" target="_blank">Explanation of Rubik's Cube Notation</a>
+  </div>
+  <br/>
+  <br/>
+  <br/>
+
+  <div style="width: 400px;position: absolute;top:300px; left: 550px">
+    <form style="position: absolute; right: 0px;">
+      Enter number of turns to randomize: <input style="width: 50px" type="text" id="randomTurnCount"><br>
+    </form>
+    <br/>
+  <button id= "RandomButton" style="position: absolute;left: 410px; top: 0px;width:100px; height:22px;font-size: 15px;">Randomize</button>
+  </div>
+  <button id= "LoadButton" style="position: absolute; left: 900px; top: 325px;width:90px; height:22px;font-size: 16px;">Load File</button>
+  <button id= "SaveButton" style="position: absolute; left: 990px; top: 325px;width:90px; height:22px;font-size: 15px;">Save State</button>
+  <a download="cubeState.txt" href="" id="downloadlink" style="position: absolute; left : 658px; top:350px;"></a>
+  <div style="width: 100px;position: absolute;top:325px; left: 658px">
+    <input type="file" id="files" name="files[]"/>
+    <output id="list"></output>
+    <script>
+      function handleFileSelect(e) {
+      var files = e.target.files; // FileList object
+        var reader = new FileReader();
+        f = files[0];
+        // Closure to capture the file information.
+        reader.onload = (function(theFile) {
+          fileLoaded = true;
+          return function(e) {
+            fileContent = JSON.parse(reader.result);
+            var x, y, z;
+            for (x = 0; x < 3; x++) {
+              for (y = 0; y < 3; y++) {
+                for (z = 0; z < 3; z++)
+                  fileContent[x][y][z][4].matrix = true;
+                }
+              }
+            }
+          })(f);
+          reader.readAsText(f);
+        }
+        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+      </script>
+  </div>
+  <div style="width: 500px;position: absolute;top:400px; left: 658px">
+    Keyboard shortcuts are the numbers from 1-9 corresponding to the order of the buttons. (i.e L is 1, R is 2, U is 3, etc.) <br>
+    The inverse shortcuts are the shift + numbers (i.e L' is !, R' is @, U is #, etc.)
+  </div>
+</body>
+</html>
