@@ -485,19 +485,19 @@ function checkSolved() {
   var orientation;
   for (i = 0; i < 3; i++) {
     for (j = 0; j < 3; j++) {
-      orientation = cubePosition[0][0][0][3];
+      orientation = cubeState[0][0][0][3];
       for (x = -1; x < 2; x++) {
         for (y = -1; y < 2; y++) {
           for (z = -1; z < 2; z++) {
-            if (cubePosition[x+1][y+1][z+1][3][i][j] !== orientation[i][j]) {
+            if (cubeState[x+1][y+1][z+1][3][i][j] !== orientation[i][j]) {
               if (x === 0 && z === 0) {
-                if (cubePosition[x+1][y+1][z+1][3][1][j] !== orientation[1][j])
+                if (cubeState[x+1][y+1][z+1][3][1][j] !== orientation[1][j])
                   return false;
               } else if (x === 0 && y === 0) {
-                if (cubePosition[x+1][y+1][z+1][3][2][j] !== orientation[2][j])
+                if (cubeState[x+1][y+1][z+1][3][2][j] !== orientation[2][j])
                   return false;
               } else if (y === 0 && z === 0) {
-                if (cubePosition[x+1][y+1][z+1][3][0][j] !== orientation[0][j])
+                if (cubeState[x+1][y+1][z+1][3][0][j] !== orientation[0][j])
                   return false;
               } else
                 return false;
